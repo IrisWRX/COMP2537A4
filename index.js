@@ -5,7 +5,6 @@ const setup = async () => {
   let matchedCards = 0;
   let clickCount = 0;
   const gameGrid = $("#game-grid");
-  const timeLimit = 100;
   let elapsedTime = 0;
   let timer;
   let difficulty = { pairs: 3, duration: 100 };
@@ -27,8 +26,8 @@ const setup = async () => {
   $("#reset-btn").on("click", function () {
     $("#game-grid").empty();
     $("#header").hide();
+    $("#game-grid").hide();
     $("#difficulty-btns").show();
-    $("#action-btns").show();
     $("#start-btn").show();
     clearInterval(timer);
     elapsedTime = 0;
@@ -39,11 +38,25 @@ const setup = async () => {
     startGame(difficulty.pairs, difficulty.duration);
   });
 
+  // Change background color
+  $("#dark-btn").on("click", function () {
+    $("#game-grid").css("background-color", "black");
+  });
+  $("#light-btn").on("click", function () {
+    $("#game-grid").css("background-color", "white");
+  });
+
   // Hide header initially
   $("#header").hide();
+  $("#game-grid").hide();
+  $("#dark-btn").hide();
+  $("#light-btn").hide();
 
   const startGame = async (numpairs, timeLimit) => {
     $("#header").show();
+    $("#game-grid").show();
+    $("#dark-btn").show();
+    $("#light-btn").show();
     $("#start-btn").hide();
 
     // Check if all pairs are matched
