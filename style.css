@@ -12,7 +12,6 @@ body {
   }
   
   #game-grid {
-    display: none;
     border: 2px tomato solid;
     width: 600px;
     height: 400px;
@@ -27,6 +26,7 @@ body {
     transition: transform 1s;
     perspective: 1000px;
     transform-style: preserve-3d;
+    cursor: pointer;
   }
   
   img {
