@@ -6,6 +6,32 @@ const setup = async () => {
   let clickCount = 0;
   const numpairs = 3;
   const gameGrid = $("#game-grid");
+  const timeLimit = 100;
+  let elapsedTime = 0;
+  let timer;
+
+  // Check if all pairs are matched
+  function checkWin() {
+    if (matchedCards === numpairs) {
+      alert("You win!");
+      clearInterval(timer);
+    }
+  }
+
+  // Start timer
+  function startTimer() {
+    $("#timer").text(`You got ${timeLimit} seconds. 0 seconds passed.`);
+    timer = setInterval(() => {
+      elapsedTime++;
+      $("#timer").text(
+        `You got ${timeLimit} seconds. ${elapsedTime} seconds passed.`
+      );
+      if (elapsedTime >= timeLimit) {
+        clearInterval(timer);
+        alert("Time up!");
+      }
+    }, 1000);
+  }
 
   // Helper function to get random index
   function getRandomIndex() {
@@ -91,11 +117,7 @@ const setup = async () => {
         openCards = 0;
         firstCard = secondCard = undefined;
 
-        setTimeout(() => {
-          if (matchedCards === numpairs) {
-            alert("You win!");
-          }
-        }, 1000);
+        setTimeout(checkWin, 1000);
       } else {
         // No match
         setTimeout(() => {
@@ -110,6 +132,9 @@ const setup = async () => {
 
   $("#totalPairs").text(numpairs);
   $("#pairsLeft").text(numpairs);
+
+  // Start the timer when the game starts
+  startTimer();
 };
 
 $(document).ready(setup);
