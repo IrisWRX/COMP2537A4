@@ -3,6 +3,7 @@ const setup = async () => {
   let secondCard = undefined;
   let openCards = 0;
   let matchedCards = 0;
+  let clickCount = 0;
   const numpairs = 3;
   const gameGrid = $("#game-grid");
 
@@ -23,7 +24,7 @@ const setup = async () => {
     const randomPokemonResponse = await axios.get(randomPokemon.url);
     const randomPokemonData = randomPokemonResponse.data;
     const randomPokemonImageUrl =
-      randomPokemonData.sprites. other["official-artwork"].front_default;
+      randomPokemonData.sprites.other["official-artwork"].front_default;
     randomPokemonUrls.push(randomPokemonImageUrl);
   }
 
@@ -58,6 +59,7 @@ const setup = async () => {
     gameGrid.children()[randomIndex2].children[0].src = randomPokemonUrls[j];
   }
 
+  // Add event listener to cards
   $(".card").on("click", function () {
     if (
       $(this).hasClass("flip") ||
@@ -69,6 +71,8 @@ const setup = async () => {
 
     $(this).toggleClass("flip");
     openCards++;
+    clickCount++;
+    $("#clickCount").text(clickCount);
 
     if (!firstCard) firstCard = $(this);
     else {
@@ -82,8 +86,16 @@ const setup = async () => {
         firstCard.addClass("matched");
         secondCard.addClass("matched");
         matchedCards++;
+        $("#pairsMatched").text(matchedCards);
+        $("#pairsLeft").text(numpairs - matchedCards);
         openCards = 0;
         firstCard = secondCard = undefined;
+
+        setTimeout(() => {
+          if (matchedCards === numpairs) {
+            alert("You win!");
+          }
+        }, 1000);
       } else {
         // No match
         setTimeout(() => {
@@ -95,6 +107,9 @@ const setup = async () => {
       }
     }
   });
+
+  $("#totalPairs").text(numpairs);
+  $("#pairsLeft").text(numpairs);
 };
 
 $(document).ready(setup);

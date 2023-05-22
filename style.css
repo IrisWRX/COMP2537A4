@@ -7,10 +7,6 @@ body {
     margin-top: 20px;
   }
   
-  #info {
-    display: none;
-  }
-  
   #game-grid {
     border: 2px tomato solid;
     width: 600px;
