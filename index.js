@@ -8,6 +8,8 @@ const setup = async () => {
   let elapsedTime = 0;
   let timer;
   let difficulty = { pairs: 3, duration: 100 };
+  let pairAttempts = 0;
+  let flipBackTimer;
 
   // Difficulty selection
   $("#easy-btn").on("click", function () {
@@ -27,6 +29,8 @@ const setup = async () => {
     $("#game-grid").empty();
     $("#header").hide();
     $("#game-grid").hide();
+    $("#dark-btn").hide();
+    $("#light-btn").hide();
     $("#difficulty-btns").show();
     $("#start-btn").show();
     clearInterval(timer);
@@ -45,6 +49,22 @@ const setup = async () => {
   $("#light-btn").on("click", function () {
     $("#game-grid").css("background-color", "white");
   });
+
+  function revealAllCards(time) {
+    if (flipBackTimer) {
+      clearTimeout(flipBackTimer); // Cancel the flip back action if power-up is activated
+      flipBackTimer = null;
+      firstCard.toggleClass("flip");
+      secondCard.toggleClass("flip");
+      openCards = 0;
+      firstCard = secondCard = undefined;
+    }
+
+    $(".card").not(".matched").addClass("flip");
+    setTimeout(() => {
+      $(".card").not(".matched").removeClass("flip");
+    }, time);
+  }
 
   // Hide header initially
   $("#header").hide();
@@ -152,6 +172,20 @@ const setup = async () => {
       if (!firstCard) firstCard = $(this);
       else {
         secondCard = $(this);
+        pairAttempts++; //
+
+        // Define the power-up trigger conditions for each difficulty level
+        const triggerCondition =
+          (difficulty.pairs === 3 && pairAttempts % 4 === 0) ||
+          (difficulty.pairs === 6 && pairAttempts % 10 === 0) ||
+          (difficulty.pairs === 12 && pairAttempts % 17 === 0);
+
+        // If the power-up should be triggered, execute the power-up logic here
+        if (triggerCondition) {
+          if (confirm("Power up!")) {
+            revealAllCards(1500);
+          }
+        }
 
         if (
           firstCard.find(".front_face")[0].src ==
@@ -169,7 +203,13 @@ const setup = async () => {
           setTimeout(checkWin, 1000);
         } else {
           // No match
-          setTimeout(() => {
+          // setTimeout(() => {
+          //   firstCard.toggleClass("flip");
+          //   secondCard.toggleClass("flip");
+          //   openCards = 0;
+          //   firstCard = secondCard = undefined;
+          // }, 1000);
+          flipBackTimer = setTimeout(() => {
             firstCard.toggleClass("flip");
             secondCard.toggleClass("flip");
             openCards = 0;
