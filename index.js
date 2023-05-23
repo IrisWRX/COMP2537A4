@@ -45,11 +45,14 @@ const setup = async () => {
   // Change background color
   $("#dark-btn").on("click", function () {
     $("#game-grid").css("background-color", "black");
+    $(".card").css("background-color", "black");
   });
   $("#light-btn").on("click", function () {
     $("#game-grid").css("background-color", "white");
+    $(".card").css("background-color", "white");
   });
 
+  // Reveal all cards
   function revealAllCards(time) {
     if (flipBackTimer) {
       clearTimeout(flipBackTimer); // Cancel the flip back action if power-up is activated
@@ -89,11 +92,13 @@ const setup = async () => {
 
     // Start timer
     function startTimer() {
-      $("#timer").text(`You got ${timeLimit} seconds. 0 seconds passed.`);
+      $("#timer").html(
+        `<p><strong>You got ${timeLimit} seconds. 0 seconds passed!</strong></p>`
+      );
       timer = setInterval(() => {
         elapsedTime++;
-        $("#timer").text(
-          `You got ${timeLimit} seconds. ${elapsedTime} seconds passed.`
+        $("#timer").html(
+          `<p><strong>You got ${timeLimit} seconds. ${elapsedTime} seconds passed!</strong></p>`
         );
         if (elapsedTime >= timeLimit) {
           clearInterval(timer);
@@ -202,13 +207,6 @@ const setup = async () => {
 
           setTimeout(checkWin, 1000);
         } else {
-          // No match
-          // setTimeout(() => {
-          //   firstCard.toggleClass("flip");
-          //   secondCard.toggleClass("flip");
-          //   openCards = 0;
-          //   firstCard = secondCard = undefined;
-          // }, 1000);
           flipBackTimer = setTimeout(() => {
             firstCard.toggleClass("flip");
             secondCard.toggleClass("flip");
