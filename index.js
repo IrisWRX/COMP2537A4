@@ -35,6 +35,20 @@ const setup = async () => {
     $("#start-btn").show();
     clearInterval(timer);
     elapsedTime = 0;
+    openCards = 0;
+    matchedCards = 0;
+    clickCount = 0;
+    pairAttempts = 0;
+    firstCard = undefined;
+    secondCard = undefined;
+
+    // Reset displayed game statistics
+    $("#pairsMatched").text("0");
+    $("#pairsLeft").text("0");
+    $("#clickCount").text("0");
+    $("#timer").html(
+      `<p><strong>You got ${difficulty.duration} seconds. 0 seconds passed!</strong></p>`
+    );
   });
 
   // Start game function
